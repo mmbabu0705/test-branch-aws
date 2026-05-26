@@ -1,0 +1,47 @@
+#!/bin/bash
+
+JENKINS_DIR="/var/lib/jenkins"
+KEYRING_DIR="/etc/apt/keyrings"
+JENKINS_KEY="$KEYRING_DIR/jenkins-keyring.asc"
+
+# Create keyrings directory if not exists
+sudo mkdir -p $KEYRING_DIR
+
+if [ -d "$JENKINS_DIR" ]; then
+    echo "Jenkins is already installed."
+else
+    echo "Installing Jenkins..."
+
+    # Update system
+    sudo apt update
+
+    # Install Java (Required for Jenkins)
+    sudo apt install fontconfig openjdk-17-jre -y
+
+    echo "Java Version:"
+    java -version
+
+    # Add Jenkins key (2026)
+    sudo wget -O $JENKINS_KEY \
+    https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+
+    # Add Jenkins repository
+    echo "deb [signed-by=$JENKINS_KEY] https://pkg.jenkins.io/debian-stable binary/" | \
+    sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+    # Update again after adding repo
+    sudo apt update
+
+    # Install Jenkins
+    sudo apt install jenkins -y
+
+    # Enable and Start Jenkins
+    sudo systemctl enable jenkins
+    sudo systemctl start jenkins
+
+    echo "------------------------------------"
+    echo "Jenkins Installed Successfully ✅"
+    echo "Initial Admin Password:"
+    sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+    echo "------------------------------------"
+fi

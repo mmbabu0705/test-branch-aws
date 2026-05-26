@@ -1,0 +1,168 @@
+================
+What is Docker?
+================
+
+=> Docker is used for containerization.
+
+=> Containerization means packaging our application code + dependencies together so that it can be easily deployed and executed anywhere.
+
+=> By using Docker, we can run our application on any machine or environment without worrying about installing software manually — because Docker takes care 
+of the dependencies inside the container.
+
+
+=====================
+Docker Architecture:
+=====================
+
+1. Dockerfile
+A Dockerfile contains a set of instructions used to:
+
+	Download dependencies
+
+	Configure the environment
+
+	Build a Docker image
+
+2. Docker Image
+A Docker image is a package that contains:
+
+	Application code
+
+	Required runtime & dependencies
+
+	It is like a template used to create containers.
+
+
+3. Docker Registry
+A Docker registry is a repository where Docker images are stored.
+
+	Examples: Docker Hub, AWS ECR, GitHub Container Registry.
+
+
+4. Docker Container
+A container is a running instance of a Docker image.
+
+When we run an image, Docker creates a container and executes our application inside it.
+
+
+================================
+Install Docker on Amazon Linux:
+================================
+
+login user: ec2-user (not root)
+
+NOTE:
+It is recommended to install and run Docker using ec2-user (non-root user).
+This is safer because it has limited permissions, and we use sudo only when required.
+Avoid logging in as root directly.
+
+# Update packages
+sudo yum update -y
+
+# Install Docker
+sudo yum install docker -y
+
+# Start Docker service
+sudo service docker start
+
+
+# Add ec2-user to Docker group (so you can run docker commands without sudo)
+
+sudo usermod -aG docker ec2-user
+
+
+# Restart the session
+
+
+
+================================
+Install Docker on Ubuntu:
+================================
+
+login user: ubuntu (not root)
+
+NOTE:
+Always install and run Docker using the ubuntu user.
+Avoid logging in as root directly. Use sudo only when required.
+This is safer and follows DevOps best practices.
+
+# Update packages
+sudo apt update -y
+
+# Install Docker
+sudo apt install docker.io -y
+
+# Start Docker service
+sudo systemctl start docker
+
+# Enable Docker to start automatically on boot
+sudo systemctl enable docker
+
+
+# Add ubuntu user to Docker group
+# (so you can run docker commands without sudo)
+sudo usermod -aG docker ubuntu
+
+
+# Restart the session (log out and log in again)
+exit
+
+
+
+================
+Docker Commands:
+================
+
+# Display all Docker images
+docker images
+
+# Display only running containers
+docker ps
+
+# Display all containers (running + stopped)
+docker ps -a
+
+# Download a Docker image from Docker Hub
+docker pull <image-name>
+
+# Run container in detached mode (background)
+docker run -d <image-name>
+
+# Note: Detached mode lets us continue using the same terminal
+
+# Display container logs
+docker logs <container-id>
+
+# Follow logs continuously (live logs)
+docker logs -f <container-id>
+
+# Stop a running container
+docker stop <container-id>
+
+# Remove a container
+docker rm <container-id>
+
+# Force remove (delete) a running container
+docker rm -f <container-id>
+
+# Show only container IDs
+docker ps -q
+
+# Remove a Docker image
+docker rmi <image-name>
+# or
+docker rmi <image-id>
+
+# Remove only stopped containers
+docker container prune
+
+# Remove only unused images
+docker image prune
+
+# Remove unused volumes
+docker volume prune
+
+# Remove all stopped containers + unused images + networks + cache
+docker system prune -a
+# Note: Use carefully (it permanently deletes unused resources)
+
